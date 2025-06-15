@@ -1,68 +1,52 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
-import { Label } from '@/shared/ui/label'
-import { useToast } from '@/components/ui/use-toast'
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { loginSchema, type LoginFormData } from '../lib/validators';
+import { loginUser, signInWithOAuth } from '../actions/login';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import Link from 'next/link';
 
 export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const { toast } = useToast()
-  const supabase = createClient()
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) throw error
-
-      // Redirigir después de iniciar sesión exitosamente
-      const redirectTo = searchParams.get('redirectedFrom') || '/dashboard'
-      router.push(redirectTo)
-    } catch (error: any) {
-      toast({
-        title: 'Error al iniciar sesión',
-        description: error.message || 'Ocurrió un error al iniciar sesión',
-        variant: 'destructive',
-      })
+      setIsLoading(true);
+      await loginUser(data);
+      router.push('/dashboard');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Ocurrió un error al iniciar sesión');
     } finally {
-      setLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  const handleSignInWithOAuth = async (provider: 'google' | 'github') => {
+  const handleOAuthSignIn = async (provider: 'google' | 'github') => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${
-            searchParams.get('redirectedFrom') || '/dashboard'
-          }`,
-        },
-      })
-
-      if (error) throw error
-    } catch (error: any) {
-      toast({
-        title: 'Error al iniciar sesión',
-        description: error.message || 'Ocurrió un error al iniciar sesión',
-        variant: 'destructive',
-      })
+      setIsLoading(true);
+      await signInWithOAuth(provider);
+    } catch (err) {
+      console.error('Error al iniciar sesión con OAuth:', err);
+      toast.error('Error al iniciar sesión con ' + provider);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -73,40 +57,44 @@ export function LoginForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Correo electrónico</Label>
           <Input
             id="email"
             type="email"
             placeholder="tu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            {...register('email')}
+            disabled={isLoading}
           />
+          {errors.email && (
+            <p className="text-sm text-destructive">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Contraseña</Label>
-            <a
+            <Link
               href="/forgot-password"
               className="text-sm font-medium text-primary hover:underline"
             >
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
           <Input
             id="password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            {...register('password')}
+            disabled={isLoading}
           />
+          {errors.password && (
+            <p className="text-sm text-destructive">{errors.password.message}</p>
+          )}
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
         </Button>
       </form>
 
@@ -125,8 +113,8 @@ export function LoginForm() {
         <Button
           variant="outline"
           type="button"
-          onClick={() => handleSignInWithOAuth('google')}
-          disabled={loading}
+          onClick={() => handleOAuthSignIn('google')}
+          disabled={isLoading}
         >
           <svg
             className="mr-2 h-4 w-4"
@@ -148,8 +136,8 @@ export function LoginForm() {
         <Button
           variant="outline"
           type="button"
-          onClick={() => handleSignInWithOAuth('github')}
-          disabled={loading}
+          onClick={() => handleOAuthSignIn('github')}
+          disabled={isLoading}
         >
           <svg
             className="mr-2 h-4 w-4"
@@ -172,10 +160,10 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         ¿No tienes una cuenta?{' '}
-        <a href="/signup" className="font-medium text-primary hover:underline">
+        <Link href="/signup" className="font-medium text-primary hover:underline">
           Regístrate
-        </a>
+        </Link>
       </p>
     </div>
-  )
+  );
 }

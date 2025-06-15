@@ -1,0 +1,77 @@
+[global]
+project_id = ""
+
+[db]
+port = 54322
+db_name = "postgres"
+db_user = "postgres"
+db_password = "postgres"
+db_host = "db"
+db_port = 5432
+db_ssl = false
+db_schema = "public"
+db_url = "postgresql://postgres:postgres@localhost:54322/postgres"
+
+[auth]
+jwt_secret = ""
+site_url = "http://localhost:3000"
+jwt_expiry = 3600
+enable_email_signup_confirmation = false
+enable_phone_signup_confirmation = false
+
+[api]
+port = 3001
+url = "http://localhost:3001"
+schema = "public"
+jwt_secret = ""
+jwt_expiry = 3600
+
+[storage]
+backend = "local"
+bucket = "storage"
+url = "http://localhost:3000/storage/v1"
+endpoint = ""
+region = ""
+access_key_id = ""
+secret_access_key = ""
+s3_force_path_style = false
+url_expiry_time = 3600
+
+[realtime]
+port = 4000
+url = "ws://localhost:4000"
+jwt_secret = ""
+jwt_expiry = 3600
+
+[functions]
+port = 4001
+url = "http://localhost:4001"
+jwt_secret = ""
+jwt_expiry = 3600
+
+[inbucket]
+port = 54324
+url = "http://localhost:54324"
+smtp_port = 54325
+pop3_port = 54326
+web_port = 54327
+
+[studio]
+port = 54323
+url = "http://localhost:54323"
+
+[analytics]
+enabled = true
+port = 3002
+url = "http://localhost:3002"
+
+[meta]
+version = "1.0.0"
+name = "freelance-app"
+description = "Freelance App"
+author = ""
+license = "MIT"
+repository = ""
+homepage = ""
+bugs = ""
+keywords = ["freelance", "app"]

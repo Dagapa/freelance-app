@@ -1,33 +1,35 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { ModalProvider } from "@/contexts/modal-context";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from '@/shared/providers/theme-provider'
+import { Toaster } from 'sonner'
+import { SupabaseProvider } from '@/shared/providers/supabase-provider'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: "Freelance Finance",
-  description: "Gestión financiera para freelancers colombianos",
-};
+  title: 'Freelance Finance',
+  description: 'Herramientas financieras para freelancers',
+  icons: {
+    icon: '/favicon.ico',
+  },
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ModalProvider>{children}</ModalProvider>
+      <body className={`${inter.variable} font-sans antialiased min-h-screen bg-background`}>
+        <ThemeProvider>
+          <SupabaseProvider>
+            {children}
+            <Toaster position="top-center" richColors />
+          </SupabaseProvider>
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
