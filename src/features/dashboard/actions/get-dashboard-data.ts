@@ -1,5 +1,4 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 interface DashboardData {
   summary: {
@@ -23,9 +22,8 @@ interface DashboardData {
 }
 
 export async function getDashboardData(): Promise<DashboardData> {
-  const supabase = createServerComponentClient({ cookies })
-  
-  // Mock data - Replace with actual Supabase queries
+  const _supabase = await createClient()
+  // Aquí puedes hacer consultas a Supabase cuando estés listo
   return {
     summary: {
       totalIncome: 12500,

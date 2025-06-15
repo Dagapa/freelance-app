@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { formatCurrency } from '@/shared/lib/utils'
 import { TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 

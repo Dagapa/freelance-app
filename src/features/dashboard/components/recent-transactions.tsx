@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
 import { formatCurrency } from '@/shared/lib/utils'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 
 interface Transaction {
   id: string
