@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { RecentTransactions } from '../recent-transactions';
-import type { Transaction } from '../recent-transactions';
+import { RecentTransactions, Transaction } from '../recent-transactions';
 
 const transactions: Transaction[] = [
   { id: '1', description: 'Pago cliente', amount: 100000, type: 'income', date: '2025-06-01', category: 'Servicios' },

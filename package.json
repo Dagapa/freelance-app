@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:ox": "oxlint",
+    "lint:fix": "oxlint --fix",
     "test": "vitest"
   },
   "dependencies": {

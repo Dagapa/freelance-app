@@ -7,10 +7,7 @@ import { Button } from '@/shared/ui/button'
 import { useSidebar } from './header'
 import {
   HomeIcon,
-  LineChartIcon,
   ListOrderedIcon,
-  SettingsIcon,
-  WalletIcon,
   X
 } from 'lucide-react'
 

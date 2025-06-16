@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
-import { useToast } from '@/components/ui/use-toast'
 
 export function ResetPasswordForm() {
   const [password, setPassword] = useState('')
@@ -15,7 +14,6 @@ export function ResetPasswordForm() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const searchParams = useSearchParams()
-  const { toast } = useToast()
   const router = useRouter()
   const supabase = createClient()
 
