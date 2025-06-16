@@ -3,19 +3,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { CreateTransactionDTO } from '../types';
 
-// Database schema:
-// create table transactions (
-//   id uuid default uuid_generate_v4() primary key,
-//   user_id uuid references auth.users not null,
-//   amount decimal not null,
-//   description text not null,
-//   type text not null check (type in ('income', 'expense')),
-//   category text not null,
-//   date timestamp with time zone not null,
-//   created_at timestamp with time zone default now(),
-//   updated_at timestamp with time zone default now()
-// );
-
 export async function createTransaction(transaction: CreateTransactionDTO) {
   try {
     console.log('Transaction data received:', JSON.stringify(transaction));
