@@ -1,10 +1,10 @@
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
-import { formatCurrency } from '@/shared/lib/utils'
+import { formatCurrency } from '../lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 
-interface Transaction {
+export interface Transaction {
   id: string
   description: string
   amount: number

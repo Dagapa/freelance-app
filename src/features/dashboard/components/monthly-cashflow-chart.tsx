@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { formatCurrency } from '@/shared/lib/utils'
+import { formatCurrency } from '../lib/utils'
 
 interface MonthlyData {
   month: string
