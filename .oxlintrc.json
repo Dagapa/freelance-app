@@ -1,0 +1,26 @@
+{
+  "typescript": {
+    "recommended": true
+  },
+  "react": {
+    "recommended": true
+  },
+  "rules": {
+    "no-console": "error",
+    "no-debugger": "error",
+    "no-duplicate-imports": "error",
+    "no-unused-vars": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "prefer-arrow-callback": "error",
+    "no-empty": "error",
+    "no-constant-condition": "error",
+    "no-duplicate-case": "error",
+    "no-fallthrough": "error",
+    "no-unreachable": "error",
+    "no-unsafe-finally": "error",
+    "no-unsafe-negation": "error",
+    "use-isnan": "error",
+    "valid-typeof": "error"
+  }
+} 
