@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { TransactionItem } from './transaction-item'
+import Link from 'next/link'
 
 export interface Transaction {
   id: string
@@ -30,9 +31,9 @@ export function RecentTransactions({ transactions }: RecentTransactionsProps) {
           ))
         )}
         <div className="mt-4 text-center">
-          <button className="text-sm font-medium text-primary hover:underline">
+          <Link href="/transactions" className="text-sm font-medium text-primary hover:underline">
             Ver todas las transacciones
-          </button>
+          </Link>
         </div>
       </CardContent>
     </Card>
