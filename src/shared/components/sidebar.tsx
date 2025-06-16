@@ -12,9 +12,9 @@ export function Sidebar() {
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Transacciones', href: '/transactions', icon: ListOrderedIcon },
-    { name: 'Reportes', href: '/reports', icon: LineChartIcon },
-    { name: 'Presupuesto', href: '/budget', icon: WalletIcon },
-    { name: 'Configuración', href: '/settings', icon: SettingsIcon },
+    // { name: 'Reportes', href: '/reports', icon: LineChartIcon },
+    // { name: 'Presupuesto', href: '/budget', icon: WalletIcon },
+    // { name: 'Configuración', href: '/settings', icon: SettingsIcon },
   ]
 
   return (
