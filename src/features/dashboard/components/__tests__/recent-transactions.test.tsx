@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { RecentTransactions } from '../recent-transactions';
-
 import type { Transaction } from '../recent-transactions';
 
 const transactions: Transaction[] = [
@@ -15,5 +15,10 @@ describe('RecentTransactions', () => {
     expect(screen.getByText(/Compra insumos/i)).toBeInTheDocument();
     expect(screen.getAllByText(/\$\s?100.000/)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/\$\s?50.000/)[0]).toBeInTheDocument();
+  });
+
+  it('muestra mensaje cuando no hay transacciones', () => {
+    render(<RecentTransactions transactions={[]} />);
+    expect(screen.getByText(/no hay transacciones recientes/i)).toBeInTheDocument();
   });
 });

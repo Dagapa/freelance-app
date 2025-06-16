@@ -2,17 +2,18 @@ import { renderHook, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCreateTransaction } from '../hooks/use-create-transaction';
 import { toast } from 'sonner';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 // Mock the toast function
-jest.mock('sonner', () => ({
+vi.mock('sonner', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 // Mock the createTransaction function
-jest.mock('../actions/create-transaction');
+vi.mock('../actions/create-transaction');
 import { createTransaction } from '../actions/create-transaction';
 
 const queryClient = new QueryClient({
@@ -31,7 +32,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 describe('useCreateTransaction', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     queryClient.clear();
   });
 
@@ -44,7 +45,7 @@ describe('useCreateTransaction', () => {
       date: new Date().toISOString(),
     };
 
-    (createTransaction as jest.Mock).mockResolvedValueOnce({ id: 'test-id' });
+    vi.mocked(createTransaction).mockResolvedValueOnce({ id: 'test-id' });
 
     const { result } = renderHook(() => useCreateTransaction(), { wrapper });
 
@@ -60,7 +61,7 @@ describe('useCreateTransaction', () => {
 
   it('shows error toast when createTransaction fails', async () => {
     const mockError = new Error('Test error');
-    (createTransaction as jest.Mock).mockRejectedValueOnce(mockError);
+    vi.mocked(createTransaction).mockRejectedValueOnce(mockError);
 
     const { result } = renderHook(() => useCreateTransaction(), { wrapper });
 
@@ -88,7 +89,7 @@ describe('useCreateTransaction', () => {
     queryClient.setQueryData(['transactions'], []);
     queryClient.setQueryData(['dashboard'], {});
 
-    (createTransaction as jest.Mock).mockResolvedValueOnce({ id: 'test-id' });
+    vi.mocked(createTransaction).mockResolvedValueOnce({ id: 'test-id' });
 
     const { result } = renderHook(() => useCreateTransaction(), { wrapper });
 

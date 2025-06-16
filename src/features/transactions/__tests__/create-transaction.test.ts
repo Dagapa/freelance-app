@@ -1,20 +1,21 @@
 import { createTransaction } from '../actions/create-transaction';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock the Supabase client
-const mockFrom = jest.fn().mockReturnThis();
-const mockInsert = jest.fn().mockReturnThis();
-const mockSelect = jest.fn().mockReturnThis();
-const mockSingle = jest.fn().mockResolvedValue({ 
+const mockFrom = vi.fn().mockReturnThis();
+const mockInsert = vi.fn().mockReturnThis();
+const mockSelect = vi.fn().mockReturnThis();
+const mockSingle = vi.fn().mockResolvedValue({ 
   data: { id: 'test-transaction-id' }, 
   error: null 
 });
 
-const mockGetUser = jest.fn().mockResolvedValue({ 
+const mockGetUser = vi.fn().mockResolvedValue({ 
   data: { user: { id: 'test-user-id' } } 
 });
 
-jest.mock('@/lib/supabase/server', () => ({
-  createClient: jest.fn(() => ({
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(() => ({
     auth: {
       getUser: mockGetUser,
     },
@@ -27,7 +28,7 @@ jest.mock('@/lib/supabase/server', () => ({
 
 describe('createTransaction', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('creates a transaction successfully', async () => {
