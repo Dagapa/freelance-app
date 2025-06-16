@@ -1,6 +1,6 @@
 // Barrel file para exportar todo lo necesario del módulo dashboard
 export * from './components/dashboard-header';
-export * from './components/dashboard-sidebar';
+export * from '../../shared/components/sidebar';
 export * from './components/dashboard-skeleton';
 export * from './components/dashboard-summary-cards';
 export * from './components/monthly-cashflow-chart';

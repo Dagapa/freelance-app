@@ -8,7 +8,7 @@ import {
   WalletIcon,
 } from 'lucide-react'
 
-export function DashboardSidebar() {
+export function Sidebar() {
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Transacciones', href: '/transactions', icon: ListOrderedIcon },

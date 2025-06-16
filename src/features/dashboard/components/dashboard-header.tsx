@@ -5,7 +5,7 @@ import { ThemeToggle } from '@/shared/components/theme-toggle'
 import { UserMenu } from '@/features/auth/components/user-menu'
 import { Menu } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui/sheet'
-import { DashboardSidebar } from './dashboard-sidebar'
+import { DashboardSidebar } from '../../../shared/components/sidebar'
 
 export function DashboardHeader() {
   return (
