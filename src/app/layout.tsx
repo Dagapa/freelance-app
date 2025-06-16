@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/shared/providers/theme-provider'
-import { Toaster } from 'sonner'
-import { SupabaseProvider } from '@/shared/providers/supabase-provider'
+import { AppProviders } from '@/shared/providers/app-providers'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -23,12 +21,9 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased min-h-screen bg-background`}>
-        <ThemeProvider>
-          <SupabaseProvider>
-            {children}
-            <Toaster position="top-center" richColors />
-          </SupabaseProvider>
-        </ThemeProvider>
+        <AppProviders>
+          {children}
+        </AppProviders>
       </body>
     </html>
   )

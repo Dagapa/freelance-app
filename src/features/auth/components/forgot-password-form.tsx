@@ -1,18 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
-import { useToast } from '@/components/ui/use-toast'
+import { Input } from '@/shared/ui/input'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/shared/ui/button'
+import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase/client'
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
-  const { toast } = useToast()
   const supabase = createClient()
   const router = useRouter()
 
@@ -29,11 +28,7 @@ export function ForgotPasswordForm() {
 
       setEmailSent(true)
     } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: error.message || 'Ocurrió un error al enviar el correo',
-        variant: 'destructive',
-      })
+      toast.error(error.message || 'Ocurrió un error al enviar el correo')
     } finally {
       setLoading(false)
     }
