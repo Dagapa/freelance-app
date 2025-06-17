@@ -6,8 +6,6 @@ import { Transaction } from '../types';
 import { AddTransactionButton } from './add-transaction-button';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const transactionTypeVariant = {
   income: 'bg-green-100 text-green-800 hover:bg-green-200',
@@ -52,10 +50,10 @@ export function TransactionList() {
         {[...Array(5)].map((_, i) => (
           <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
             <div className="space-y-2">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-24" />
+              <div className="h-4 w-32" />
+              <div className="h-3 w-24" />
             </div>
-            <Skeleton className="h-6 w-20" />
+            <div className="h-6 w-20" />
           </div>
         ))}
       </div>
@@ -87,12 +85,11 @@ export function TransactionList() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Badge
+            <div
               className={transactionTypeVariant[transaction.type]}
-              variant="outline"
             >
               {transactionTypeLabel[transaction.type]}
-            </Badge>
+            </div>
             <div className="font-medium">
               {transaction.type === 'expense' ? '-' : ''}
               {formatCurrency(transaction.amount)}
