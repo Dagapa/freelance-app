@@ -1,5 +1,6 @@
 'use client';
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { TransactionForm } from './transaction-form';
 import { useCreateTransaction } from '../hooks/use-create-transaction';
 
@@ -21,13 +22,13 @@ export function AddTransactionModal({
   };
 
   return (
-    <div onClick={() => onOpenChange(false)}>
-      <div className="sm:max-w-[425px]">
-        <header>
-          <h2>Agregar transacción</h2>
-        </header>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Agregar transacción</DialogTitle>
+        </DialogHeader>
         <TransactionForm onSubmit={handleSubmit} isSubmitting={isPending} />
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

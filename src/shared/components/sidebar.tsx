@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/shared/ui/button'
 import { usePathname } from 'next/navigation'
 import {
   XIcon,
@@ -7,9 +8,8 @@ import {
   HomeIcon,
   ListOrderedIcon,
 } from 'lucide-react'
-import { useSidebar } from '../../hooks/useSidebar';
-import { SidebarNavItems } from './sidebarItems';
-import { Button } from '../forms/button';
+import { useSidebar } from '../hooks/useSidebar';
+import { SidebarNavItems } from './sidebar/sidebarItems';
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -33,7 +33,7 @@ export function Sidebar() {
         <div className="flex h-full flex-col gap-2">
           <div className="flex h-14 items-center px-4 lg:h-[60px] lg:px-6">
             <Button
-              // className="flex items-center gap-2 w-full font-semibold bg-muted/40 text-white hover:bg-muted/60"
+              className="flex items-center gap-2 w-full font-semibold bg-muted/40 text-white hover:bg-muted/60"
               onClick={toggle}
               size={isOpen ? 'default' : 'icon'}
             >

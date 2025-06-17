@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ForgotPasswordForm } from '@/modules/auth/components/forgot-password-form'
+import { ForgotPasswordForm } from '@/features/auth/components/forgot-password-form'
 
 export const metadata: Metadata = {
   title: 'Restablecer contraseña',

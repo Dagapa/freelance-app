@@ -1,5 +1,6 @@
-import { Sidebar } from "../../modules/dashboard";
-import { SidebarProvider } from "../../shared/providers/SidebarProvider";
+import { Sidebar } from '@/shared/components/sidebar'
+import { Header } from '@/shared/components/header'
+import { SidebarProvider } from '@/shared/providers/SidebarProvider';
 
 export default function DashboardLayout({
   children,
@@ -8,14 +9,14 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-background"> 
+      <div className="flex min-h-screen bg-background">
         <Sidebar />
-        {/* <div className="flex-1 flex flex-col p-3">
+        <div className="flex-1 flex flex-col p-3">
           <Header />
           <main className="flex-1 p-4 md:p-8 overflow-auto">
             {children}
           </main>
-        </div> */}
+        </div>
       </div>
     </SidebarProvider>
   );
