@@ -1,118 +1,65 @@
 'use client';
 
-import { useEffect } from 'react';
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { Button } from '@/shared/ui/button'
-import { useSidebar } from './header'
+import { usePathname } from 'next/navigation'
 import {
+  XIcon,
+  MenuIcon,
   HomeIcon,
   ListOrderedIcon,
-  X
 } from 'lucide-react'
+import { useSidebar } from '../hooks/useSidebar';
+import { SidebarNavItems } from './sidebar/sidebarItems';
 
 export function Sidebar() {
-  const { isOpen, close } = useSidebar()
-  const pathname = usePathname()
-  
-  // Cerrar el sidebar cuando cambia la ruta
-  useEffect(() => {
-    close()
-  }, [pathname, close])
-  
+  const pathname = usePathname();
+  const { isOpen, close, toggle } = useSidebar()
+
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Transacciones', href: '/transactions', icon: ListOrderedIcon },
-    // { name: 'Reportes', href: '/reports', icon: LineChartIcon },
-    // { name: 'Presupuesto', href: '/budget', icon: WalletIcon },
-    // { name: 'Configuración', href: '/settings', icon: SettingsIcon },
   ]
 
   return (
     <>
-      {/* Sidebar de escritorio (siempre visible en md+) */}
-      <aside className="hidden border-r bg-muted/40 md:block w-64">
+      <aside
+        className={`
+          inset-y-0 left-0 z-50 flex h-screen flex-col border-2 border-muted rounded-lg transition-all duration-300 ease-in-out
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${isOpen ? 'w-64' : 'w-20'}
+          md:relative md:translate-x-0 md:block
+        `}
+      >
         <div className="flex h-full flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
-              <span>Freelance Finance</span>
-            </Link>
+          <div className="flex h-14 items-center px-4 lg:h-[60px] lg:px-6">
+            <Button
+              className="flex items-center gap-2 w-full font-semibold bg-muted/40 text-white hover:bg-muted/60"
+              onClick={toggle}
+              size={isOpen ? 'default' : 'icon'}
+            >
+              {isOpen ? <span>Freelance Finance</span> : <MenuIcon />}
+            </Button>
+            <button
+              className="ml-auto p-2 rounded-full hover:bg-muted md:hidden"
+              onClick={close}
+              aria-label="Cerrar menú"
+            >
+              <XIcon className="h-5 w-5" />
+            </button>
           </div>
-          <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Button
-                    key={item.href}
-                    variant={isActive ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-3"
-                    asChild
-                  >
-                    <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
-                      {item.name}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </nav>
+          <div className="flex-1 overflow-auto py-2">
+            <SidebarNavItems navItems={navItems} close={close} pathname={pathname} isOpen={isOpen} />
           </div>
         </div>
       </aside>
 
-      {/* Overlay para cerrar el sidebar móvil */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden" 
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
           onClick={close}
           aria-hidden="true"
         />
       )}
-      
-      {/* Sidebar móvil */}
-      <div 
-        className={`
-          fixed top-0 left-0 z-50 h-full w-64 bg-background transform transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          md:hidden
-        `}
-      >
-        <div className="flex h-full flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
-              <span>Freelance Finance</span>
-            </Link>
-            <button 
-              className="ml-auto p-2 rounded-full hover:bg-muted" 
-              onClick={close}
-              aria-label="Cerrar menú"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Button
-                    key={item.href}
-                    variant={isActive ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-3"
-                    asChild
-                  >
-                    <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
-                      {item.name}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      </div>
     </>
   )
 }
