@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
-import { DashboardSummaryCards } from '@/features/dashboard/components/dashboard-summary-cards'
-import { MonthlyCashFlowChart } from '@/features/dashboard/components/monthly-cashflow-chart'
-import { RecentTransactions } from '@/features/dashboard/components/recent-transactions'
-import { getDashboardData } from '@/features/dashboard/actions/get-dashboard-data'
-import { DashboardSkeleton } from '@/features/dashboard/components/dashboard-skeleton'
+import { DashboardSummaryCards } from '@dashboard/components/dashboard-summary-cards'
+import { MonthlyCashFlowChart } from '@dashboard/components/monthly-cashflow-chart'
+import { RecentTransactions } from '@dashboard/components/recent-transactions'
+import { getDashboardData } from '@dashboard/actions/get-dashboard-data'
+import { DashboardSkeleton } from '@dashboard/components/dashboard-skeleton'
 
 export default async function DashboardPage() {
   const data = await getDashboardData()

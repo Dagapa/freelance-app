@@ -23,6 +23,7 @@
       "@lib/*": ["./src/lib/*"],
       "@shared/*": ["./src/shared/*"],
       "@auth/*": ["./src/features/auth/*"],
+      "@dashboard/*": ["./src/features/dashboard/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
