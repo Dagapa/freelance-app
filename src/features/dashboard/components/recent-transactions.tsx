@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card'
 import { TransactionItem } from './transaction-item'
 import Link from 'next/link'
 

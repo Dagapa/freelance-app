@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Label } from '@/shared/ui/label'
-import { Input } from '@/shared/ui/input'
+import { Label } from '@shared/ui/label'
+import { Input } from '@shared/ui/input'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/shared/ui/button'
+import { Button } from '@shared/ui/button'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 

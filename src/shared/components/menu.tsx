@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { useSidebar } from '../hooks/useSidebar';
 import { MenuItems } from './menuItems';
-import { Button } from '@/shared/ui/button';
+import { Button } from '@shared/ui/button';
 
 export function Menu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

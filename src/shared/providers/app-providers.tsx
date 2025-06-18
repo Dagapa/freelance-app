@@ -1,10 +1,10 @@
 'use client';
 
-import { QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 import { queryClient } from '@/lib/react-query';
 import { ThemeProvider } from './theme-provider';
 import { SupabaseProvider } from './supabase-provider';
-import { Toaster } from 'sonner';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +12,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       <SupabaseProvider>
         <QueryClientProvider client={queryClient}>
           {children}
-          <Toaster position="top-center" richColors />
+          <Toaster position="top-right" richColors />
         </QueryClientProvider>
       </SupabaseProvider>
     </ThemeProvider>

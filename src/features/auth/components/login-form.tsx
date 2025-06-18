@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
-import { Label } from '@/shared/ui/label'
+import { Button } from '@shared/ui/button'
+import { Input } from '@shared/ui/input'
+import { Label } from '@shared/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 
 export function LoginForm() {

@@ -1,9 +1,9 @@
 'use client'
 
 import { User, LogOut } from 'lucide-react'
-import { Button } from '@/shared/ui/button'
+import { Button } from '@shared/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { Dropdown } from '@/shared/components/dropdown'
+import { Dropdown } from '@shared/components/dropdown'
 import { useRouter } from 'next/navigation'
 
 export function UserMenu() {

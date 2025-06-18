@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/shared/ui/button';
+import { Button } from '@shared/ui/button';
 import { Plus } from 'lucide-react';
 import { AddTransactionModal } from './add-transaction-modal';
 

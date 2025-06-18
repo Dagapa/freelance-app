@@ -1,5 +1,5 @@
 import { Menu } from './menu'
-import { ThemeToggle } from '@/shared/components/theme-toggle'
+import { ThemeToggle } from '@shared/components/theme-toggle'
 import { UserMenu } from '@/features/auth/components/user-menu'
 
 export function Header() {

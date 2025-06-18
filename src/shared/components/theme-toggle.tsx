@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from 'lucide-react';
 import { Switch } from './switch';
-import useTheme from '@/shared/hooks/useTheme'
+import useTheme from '@shared/hooks/useTheme'
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
