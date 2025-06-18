@@ -1,4 +1,5 @@
-import { AddTransactionButton, TransactionList } from '@/features/transactions';
+import { TransactionList } from "@transactions/components/transaction-list";
+import { AddTransactionButton } from "@transactions/components/add-transaction-button";
 
 export default function TransactionsPage() {
   return (
