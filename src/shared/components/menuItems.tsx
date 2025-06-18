@@ -9,12 +9,11 @@ interface SidebarNavItemsProps {
   }[];
   close: () => void;
   pathname: string;
-  isOpen: boolean;
 }
 
-export function SidebarNavItems({ navItems, close, pathname, isOpen }: SidebarNavItemsProps) {
+export function MenuItems({ navItems, close, pathname }: SidebarNavItemsProps) {
   return (
-    <nav className="grid items-start w-full px-2 gap-3 text-sm font-medium lg:px-4">
+    <section className="flex flex-col w-full px-2 gap-1 text-sm font-medium lg:px-4 lg:flex-row">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -23,19 +22,18 @@ export function SidebarNavItems({ navItems, close, pathname, isOpen }: SidebarNa
             key={item.name}
             variant="ghost"
             onClick={close}
-            size="icon"
-            className={`${isOpen ? 'w-full' : 'w-12'} ${isActive ? 'bg-muted' : ''}`}
+            className={`w-full justify-start ${isActive ? 'bg-muted' : ''}`}
           >
-            <Link 
+            <Link
               href={item.href}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 w-full text-muted-foreground transition-all`}
             >
               <Icon className="h-4 w-4" />
-              {isOpen && item.name}
+              {item.name}
             </Link>
           </Button>
         );
       })}
-    </nav>
+    </section>
   );
 }
