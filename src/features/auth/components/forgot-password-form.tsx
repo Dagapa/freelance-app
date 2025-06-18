@@ -6,7 +6,7 @@ import { Input } from '@shared/ui/input'
 import { useRouter } from 'next/navigation'
 import { Button } from '@shared/ui/button'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@lib/supabase/client'
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState('')

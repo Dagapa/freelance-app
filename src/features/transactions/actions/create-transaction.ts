@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@lib/supabase/server';
 import { CreateTransactionDTO } from '../types';
 
 export async function createTransaction(transaction: CreateTransactionDTO) {

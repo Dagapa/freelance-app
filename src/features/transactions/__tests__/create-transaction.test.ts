@@ -14,7 +14,7 @@ const mockGetUser = vi.fn().mockResolvedValue({
   data: { user: { id: 'test-user-id' } } 
 });
 
-vi.mock('@/lib/supabase/server', () => ({
+vi.mock('@lib/supabase/server', () => ({
   createClient: vi.fn(() => ({
     auth: {
       getUser: mockGetUser,
@@ -42,7 +42,7 @@ describe('createTransaction', () => {
 
     const result = await createTransaction(mockTransaction);
 
-    const { createClient } = await import('@/lib/supabase/server');
+    const { createClient } = await import('@lib/supabase/server');
     expect(createClient).toHaveBeenCalled();
     expect(mockFrom).toHaveBeenCalledWith('transactions');
     expect(mockInsert).toHaveBeenCalledWith([

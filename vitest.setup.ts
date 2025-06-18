@@ -31,7 +31,7 @@ vi.mock('next-auth/react', () => ({
 }));
 
 // Mock de Supabase
-vi.mock('@/lib/supabase/client', () => ({
+vi.mock('@lib/supabase/client', () => ({
   __esModule: true,
   createClient: vi.fn(() => ({
     from: vi.fn().mockReturnThis(),

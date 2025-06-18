@@ -1,7 +1,7 @@
 'use client';
 
 import { Toaster } from 'sonner';
-import { queryClient } from '@/lib/react-query';
+import { queryClient } from '@lib/react-query';
 import { ThemeProvider } from './theme-provider';
 import { SupabaseProvider } from './supabase-provider';
 import { QueryClientProvider } from '@tanstack/react-query';
