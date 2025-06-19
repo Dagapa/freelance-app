@@ -22,21 +22,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { transactionFormSchema, TransactionFormValues } from '../lib/schema';
 import { Loader2 } from 'lucide-react';
-
-const categories = [
-  { value: 'salary', label: 'Salario' },
-  { value: 'freelance', label: 'Trabajo Freelance' },
-  { value: 'investment', label: 'Inversiones' },
-  { value: 'other_income', label: 'Otros ingresos' },
-  { value: 'food', label: 'Comida' },
-  { value: 'transport', label: 'Transporte' },
-  { value: 'housing', label: 'Vivienda' },
-  { value: 'entertainment', label: 'Entretenimiento' },
-  { value: 'shopping', label: 'Compras' },
-  { value: 'health', label: 'Salud' },
-  { value: 'education', label: 'Educación' },
-  { value: 'other_expense', label: 'Otros gastos' },
-];
+import { useState, useEffect, useRef } from 'react';
+import { AddCategoryModal } from '../../categories/components/add-category-modal';
 
 interface TransactionFormProps {
   onSubmit: (values: TransactionFormValues) => void;
@@ -52,6 +39,72 @@ export function TransactionForm({
     date: new Date().toISOString(),
   },
 }: TransactionFormProps) {
+  const [dbCategories, setDbCategories] = useState<Array<{ id: string; name: string }>>([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
+  const previousCategoryValueRef = useRef<string | undefined>(undefined);
+  const ADD_NEW_CATEGORY_VALUE = '__ADD_NEW_CATEGORY__';
+
+  useEffect(() => {
+    async function fetchCategories() {
+      setIsLoadingCategories(true);
+      try {
+        const response = await fetch('/api/categories');
+        if (!response.ok) {
+          console.error('Failed to fetch categories, status:', response.status);
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+          console.error('Fetched categories data is not an array:', data);
+          setDbCategories([]);
+        } else {
+          setDbCategories(data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setDbCategories([]);
+      } finally {
+        setIsLoadingCategories(false);
+      }
+    }
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    setIsLoadingCategories(true);
+    try {
+      const response = await fetch('/api/categories');
+      if (!response.ok) {
+        console.error('Failed to fetch categories, status:', response.status);
+        throw new Error('Failed to fetch categories');
+      }
+      const data = await response.json();
+      if (!Array.isArray(data)) {
+        console.error('Fetched categories data is not an array:', data);
+        setDbCategories([]);
+      } else {
+        setDbCategories(data);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      setDbCategories([]); // Clear categories on error to avoid stale data
+    } finally {
+      setIsLoadingCategories(false);
+    }
+  };
+
+  const handleCategoryCreated = (newCategory: { id: string; name: string }) => {
+    fetchCategories(); // Refetch categories to include the new one
+    form.setValue('category', newCategory.id, { shouldValidate: true });
+    setIsAddCategoryModalOpen(false);
+  };
+
+  const categorySelectOptions = dbCategories.map(cat => ({
+    value: cat.id,
+    label: cat.name,
+  }));
+
   const form = useForm<TransactionFormValues>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
@@ -132,24 +185,39 @@ export function TransactionForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Categoría</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                onValueChange={(value) => {
+                  if (value === ADD_NEW_CATEGORY_VALUE) {
+                    previousCategoryValueRef.current = field.value; // Store current value
+                    setIsAddCategoryModalOpen(true);
+                    // Do not call field.onChange here, so the select doesn't briefly show "Add new..."
+                  } else {
+                    field.onChange(value);
+                  }
+                }}
+                value={field.value} // This ensures the select reflects the form's state
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona una categoría" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {categories
-                    .filter((cat) =>
-                      transactionType === 'income'
-                        ? cat.value.endsWith('income') || cat.value === 'salary' || cat.value === 'freelance' || cat.value === 'investment'
-                        : !['salary', 'freelance', 'investment', 'other_income'].includes(cat.value)
-                    )
-                    .map((category) => (
-                      <SelectItem key={category.value} value={category.value}>
-                        {category.label}
+                  {isLoadingCategories ? (
+                    <SelectItem value="loading" disabled>Cargando categorías...</SelectItem>
+                  ) : (
+                    <>
+                      {categorySelectOptions.map((category) => (
+                        <SelectItem key={category.value} value={category.value}>
+                          {category.label}
+                        </SelectItem>
+                      ))}
+                      {/* You might want a <SelectSeparator /> here if your UI library supports it */}
+                      <SelectItem value={ADD_NEW_CATEGORY_VALUE}>
+                        + Agregar nueva categoría
                       </SelectItem>
-                    ))}
+                    </>
+                  )}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -195,6 +263,20 @@ export function TransactionForm({
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        <AddCategoryModal
+          isOpen={isAddCategoryModalOpen}
+          onClose={() => {
+            setIsAddCategoryModalOpen(false);
+            // Restore previous value if user closes modal without adding and select is still on 'add new' or empty
+            const currentCategoryValue = form.getValues('category');
+            if (previousCategoryValueRef.current && (currentCategoryValue === ADD_NEW_CATEGORY_VALUE || !currentCategoryValue)) {
+              form.setValue('category', previousCategoryValueRef.current, { shouldValidate: true });
+            }
+            previousCategoryValueRef.current = undefined; // Clear the ref
+          }}
+          onCategoryCreated={handleCategoryCreated}
         />
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
