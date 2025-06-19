@@ -36,7 +36,7 @@ export async function createCategoryAction(payload: CreateCategoryPayload) {
 
     if (error) {
       console.error('Error creating category in action:', error.message);
-      if (error.code === '23505') { // unique_violation
+      if (error.code === '23505') {
         return { error: 'Ya existe una categoría con este nombre.', details: error.message, status: 409 };
       }
       return { error: 'Error al crear la categoría', details: error.message, status: 500 };

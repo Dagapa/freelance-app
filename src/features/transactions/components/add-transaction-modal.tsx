@@ -14,6 +14,8 @@ export function AddTransactionModal({
   const { mutate: createTransaction, isPending } = useCreateTransaction();
 
   const handleSubmit = (values: any) => {
+
+    console.log(values);
     createTransaction(values, {
       onSuccess: () => {
         onOpenChange(false);

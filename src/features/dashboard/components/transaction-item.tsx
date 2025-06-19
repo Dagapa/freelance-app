@@ -10,6 +10,7 @@ interface TransactionItemProps {
 }
 
 export function TransactionItem({ transaction }: TransactionItemProps) {
+
   return (
     <div className="flex items-center">
       <div className="mr-4">
@@ -26,7 +27,7 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
       <div className="flex-1">
         <p className="text-sm font-medium">{transaction.description}</p>
         <p className="text-xs text-muted-foreground">
-          {transaction.category} • {format(new Date(transaction.date), 'd MMM', { locale: es })}
+          {transaction.category_name} • {format(new Date(transaction.date), 'd MMM', { locale: es })}
         </p>
       </div>
       <div className="text-right">

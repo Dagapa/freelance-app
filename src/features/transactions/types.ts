@@ -7,7 +7,8 @@ export type TransactionType = 'income' | 'expense';
  * - amount: decimal not null
  * - description: text not null
  * - type: text not null check (type in ('income', 'expense'))
- * - category: text not null
+ * - category_id: uuid not null references categories(id)
+ * - category_name: text not null
  * - date: timestamp with time zone not null
  * - created_at: timestamp with time zone default now()
  * - updated_at: timestamp with time zone default now()
@@ -16,7 +17,8 @@ export interface CreateTransactionDTO {
   description: string;
   amount: number;
   type: TransactionType;
-  category: string;
+  category_id: string;
+  category_name: string;
   date: string;
 }
 

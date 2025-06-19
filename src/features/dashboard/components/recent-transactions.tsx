@@ -9,7 +9,7 @@ export interface Transaction {
   amount: number
   type: 'income' | 'expense'
   date: string
-  category: string
+  category_name: string
 }
 
 interface RecentTransactionsProps {

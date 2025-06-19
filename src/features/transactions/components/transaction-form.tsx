@@ -1,9 +1,9 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
+import { useForm } from 'react-hook-form';
+import { Button } from '@shared/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -88,15 +88,16 @@ export function TransactionForm({
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
-      setDbCategories([]); // Clear categories on error to avoid stale data
+      setDbCategories([]);
     } finally {
       setIsLoadingCategories(false);
     }
   };
 
   const handleCategoryCreated = (newCategory: { id: string; name: string }) => {
-    fetchCategories(); // Refetch categories to include the new one
-    form.setValue('category', newCategory.id, { shouldValidate: true });
+    fetchCategories();
+    form.setValue('category_id', newCategory.id, { shouldValidate: true });
+    form.setValue('category_name', newCategory.name, { shouldValidate: true }); // Keep this as newCategory.name is directly available
     setIsAddCategoryModalOpen(false);
   };
 
@@ -111,14 +112,15 @@ export function TransactionForm({
       description: '',
       amount: 0,
       type: 'expense',
-      category: '',
+      category_name: '',
+      category_id: '',
       date: new Date().toISOString(),
       notes: '',
       ...defaultValues,
     },
   });
 
-  const transactionType = form.watch('type');
+  console.log(categorySelectOptions);
 
   return (
     <Form {...form}>
@@ -181,21 +183,27 @@ export function TransactionForm({
 
         <FormField
           control={form.control}
-          name="category"
+          name="category_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Categoría</FormLabel>
               <Select
                 onValueChange={(value) => {
                   if (value === ADD_NEW_CATEGORY_VALUE) {
-                    previousCategoryValueRef.current = field.value; // Store current value
+                    previousCategoryValueRef.current = field.value; // Store current category_id
                     setIsAddCategoryModalOpen(true);
-                    // Do not call field.onChange here, so the select doesn't briefly show "Add new..."
                   } else {
-                    field.onChange(value);
+                    field.onChange(value); // This updates category_id
+                    const selectedCategoryObject = dbCategories.find(cat => cat.id === value);
+                    if (selectedCategoryObject) {
+                      form.setValue('category_name', selectedCategoryObject.name, { shouldValidate: true });
+                    } else {
+                      // Handle case where category might not be found, though unlikely if dbCategories is up to date
+                      form.setValue('category_name', '', { shouldValidate: true }); 
+                    }
                   }
                 }}
-                value={field.value} // This ensures the select reflects the form's state
+                value={field.value}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -212,7 +220,6 @@ export function TransactionForm({
                           {category.label}
                         </SelectItem>
                       ))}
-                      {/* You might want a <SelectSeparator /> here if your UI library supports it */}
                       <SelectItem value={ADD_NEW_CATEGORY_VALUE}>
                         + Agregar nueva categoría
                       </SelectItem>
@@ -269,12 +276,16 @@ export function TransactionForm({
           isOpen={isAddCategoryModalOpen}
           onClose={() => {
             setIsAddCategoryModalOpen(false);
-            // Restore previous value if user closes modal without adding and select is still on 'add new' or empty
-            const currentCategoryValue = form.getValues('category');
-            if (previousCategoryValueRef.current && (currentCategoryValue === ADD_NEW_CATEGORY_VALUE || !currentCategoryValue)) {
-              form.setValue('category', previousCategoryValueRef.current, { shouldValidate: true });
+            const currentCategoryId = form.getValues('category_id');
+            // If modal is closed and category_id is still 'add new' or empty, restore previous selection
+            if (previousCategoryValueRef.current && (currentCategoryId === ADD_NEW_CATEGORY_VALUE || !currentCategoryId)) {
+              const previousSelectedCategory = dbCategories.find(cat => cat.id === previousCategoryValueRef.current);
+              form.setValue('category_id', previousCategoryValueRef.current, { shouldValidate: true });
+              if (previousSelectedCategory) {
+                form.setValue('category_name', previousSelectedCategory.name, { shouldValidate: true });
+              }
             }
-            previousCategoryValueRef.current = undefined; // Clear the ref
+            previousCategoryValueRef.current = undefined;
           }}
           onCategoryCreated={handleCategoryCreated}
         />
