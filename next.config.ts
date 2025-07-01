@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
         fs: false,
         net: false,
         tls: false,
+        punycode: false,
       };
     }
 
@@ -24,6 +25,18 @@ const nextConfig: NextConfig = {
   // Optimizaciones adicionales
   experimental: {
     optimizePackageImports: ['@supabase/supabase-js'],
+  },
+  // Suprimir warnings de Node.js
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  // Configuración para suprimir warnings de punycode
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
   },
 };
 
