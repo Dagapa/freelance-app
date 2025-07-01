@@ -8,13 +8,14 @@ import { Label } from '@shared/ui/label';
 import { loginSchema, type LoginFormData } from '../lib/validators';
 import { loginUser, signInWithOAuth } from '../actions/login';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import { useToast } from '@shared/ui/toast';
 import { useState } from 'react';
 import Link from 'next/link';
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const {
     register,
@@ -30,7 +31,11 @@ export function LoginForm() {
       await loginUser(data);
       router.push('/dashboard');
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Ocurrió un error al iniciar sesión');
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Ocurrió un error al iniciar sesión',
+        variant: 'destructive'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +47,11 @@ export function LoginForm() {
       await signInWithOAuth(provider);
     } catch (err) {
       console.error('Error al iniciar sesión con OAuth:', err);
-      toast.error('Error al iniciar sesión con ' + provider);
+      toast({
+        title: 'Error',
+        description: 'Error al iniciar sesión con ' + provider,
+        variant: 'destructive'
+      });
     } finally {
       setIsLoading(false);
     }

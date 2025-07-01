@@ -5,7 +5,7 @@ import { Label } from '@shared/ui/label'
 import { Input } from '@shared/ui/input'
 import { useRouter } from 'next/navigation'
 import { Button } from '@shared/ui/button'
-import { toast } from 'sonner'
+import { useToast } from '@shared/ui/toast'
 import { createClient } from '@lib/supabase/client'
 
 export function ForgotPasswordForm() {
@@ -14,6 +14,7 @@ export function ForgotPasswordForm() {
   const [emailSent, setEmailSent] = useState(false)
   const supabase = createClient()
   const router = useRouter()
+  const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,7 +29,11 @@ export function ForgotPasswordForm() {
 
       setEmailSent(true)
     } catch (error: any) {
-      toast.error(error.message || 'Ocurrió un error al enviar el correo')
+      toast({
+        title: 'Error',
+        description: error.message || 'Ocurrió un error al enviar el correo',
+        variant: 'destructive'
+      })
     } finally {
       setLoading(false)
     }

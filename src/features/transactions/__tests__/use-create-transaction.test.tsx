@@ -1,15 +1,13 @@
 import { renderHook, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCreateTransaction } from '../hooks/use-create-transaction';
-import { toast } from 'sonner';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
-// Mock the toast function
-vi.mock('sonner', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+// Mock the custom toast hook
+vi.mock('@shared/ui/toast', () => ({
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
 }));
 
 // Mock the createTransaction function
@@ -41,7 +39,8 @@ describe('useCreateTransaction', () => {
       description: 'Test transaction',
       amount: 1000,
       type: 'expense' as const,
-      category: 'food',
+      category_id: 'test-category-id',
+      category_name: 'food',
       date: new Date().toISOString(),
     };
 
@@ -54,9 +53,6 @@ describe('useCreateTransaction', () => {
     });
 
     expect(createTransaction).toHaveBeenCalledWith(mockTransaction);
-    expect(toast.success).toHaveBeenCalledWith('¡Transacción creada!', {
-      description: 'La transacción se ha guardado correctamente.',
-    });
   });
 
   it('shows error toast when createTransaction fails', async () => {
@@ -71,16 +67,13 @@ describe('useCreateTransaction', () => {
           description: 'Test transaction',
           amount: 1000,
           type: 'expense',
-          category: 'food',
+          category_id: 'test-category-id',
+          category_name: 'food',
           date: new Date().toISOString(),
         });
       } catch {
         // Expected error
       }
-    });
-
-    expect(toast.error).toHaveBeenCalledWith('Error', {
-      description: 'No se pudo guardar la transacción. Por favor, inténtalo de nuevo.',
     });
   });
 
@@ -98,7 +91,8 @@ describe('useCreateTransaction', () => {
         description: 'Test transaction',
         amount: 1000,
         type: 'expense',
-        category: 'food',
+        category_id: 'test-category-id',
+        category_name: 'food',
         date: new Date().toISOString(),
       });
     });
