@@ -11,15 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+} from '@shared/ui/form';
+import { Select } from '@shared/ui/select';
+import { Textarea } from '@shared/ui/textarea';
 import { transactionFormSchema, TransactionFormValues } from '../lib/schema';
 import { Loader2 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -123,154 +117,101 @@ export function TransactionForm({
   console.log(categorySelectOptions);
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo de transacción</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un tipo" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="income">Ingreso</SelectItem>
-                  <SelectItem value="expense">Gasto</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <FormLabel>Tipo de transacción</FormLabel>
+        <Select 
+          value={form.watch('type')} 
+          onValueChange={(value) => form.setValue('type', value as 'income' | 'expense')}
+          options={[
+            { value: 'income', label: 'Ingreso' },
+            { value: 'expense', label: 'Gasto' }
+          ]}
+          placeholder="Selecciona un tipo"
         />
+        {form.formState.errors.type && (
+          <FormMessage>{form.formState.errors.type.message}</FormMessage>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Descripción</FormLabel>
-              <FormControl>
-                <Input placeholder="Ej: Pago de cliente" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+      <div className="space-y-2">
+        <FormLabel>Descripción</FormLabel>
+        <Input 
+          placeholder="Ej: Pago de cliente" 
+          {...form.register('description')}
         />
+        {form.formState.errors.description && (
+          <FormMessage>{form.formState.errors.description.message}</FormMessage>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Monto</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+      <div className="space-y-2">
+        <FormLabel>Monto</FormLabel>
+        <Input
+          type="number"
+          step="0.01"
+          placeholder="0.00"
+          {...form.register('amount', { valueAsNumber: true })}
         />
+        {form.formState.errors.amount && (
+          <FormMessage>{form.formState.errors.amount.message}</FormMessage>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="category_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categoría</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  if (value === ADD_NEW_CATEGORY_VALUE) {
-                    previousCategoryValueRef.current = field.value; // Store current category_id
-                    setIsAddCategoryModalOpen(true);
-                  } else {
-                    field.onChange(value); // This updates category_id
-                    const selectedCategoryObject = dbCategories.find(cat => cat.id === value);
-                    if (selectedCategoryObject) {
-                      form.setValue('category_name', selectedCategoryObject.name, { shouldValidate: true });
-                    } else {
-                      // Handle case where category might not be found, though unlikely if dbCategories is up to date
-                      form.setValue('category_name', '', { shouldValidate: true }); 
-                    }
-                  }
-                }}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona una categoría" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {isLoadingCategories ? (
-                    <SelectItem value="loading" disabled>Cargando categorías...</SelectItem>
-                  ) : (
-                    <>
-                      {categorySelectOptions.map((category) => (
-                        <SelectItem key={category.value} value={category.value}>
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                      <SelectItem value={ADD_NEW_CATEGORY_VALUE}>
-                        + Agregar nueva categoría
-                      </SelectItem>
-                    </>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
+      <div className="space-y-2">
+        <FormLabel>Categoría</FormLabel>
+        <Select
+          value={form.watch('category_id')}
+          onValueChange={(value) => {
+            if (value === ADD_NEW_CATEGORY_VALUE) {
+              previousCategoryValueRef.current = form.getValues('category_id');
+              setIsAddCategoryModalOpen(true);
+            } else {
+              form.setValue('category_id', value);
+              const selectedCategoryObject = dbCategories.find(cat => cat.id === value);
+              if (selectedCategoryObject) {
+                form.setValue('category_name', selectedCategoryObject.name);
+              }
+            }
+          }}
+          options={[
+            ...categorySelectOptions,
+            { value: ADD_NEW_CATEGORY_VALUE, label: '+ Agregar nueva categoría' }
+          ]}
+          placeholder="Selecciona una categoría"
+          disabled={isLoadingCategories}
         />
+        {form.formState.errors.category_id && (
+          <FormMessage>{form.formState.errors.category_id.message}</FormMessage>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Fecha</FormLabel>
-              <FormControl>
-                <Input
-                  type="datetime-local"
-                  {...field}
-                  value={field.value ? new Date(field.value).toISOString().slice(0, 16) : ''}
-                  onChange={(e) => {
-                    const date = e.target.value ? new Date(e.target.value).toISOString() : '';
-                    field.onChange(date);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+      <div className="space-y-2">
+        <FormLabel>Fecha</FormLabel>
+        <Input
+          type="datetime-local"
+          value={form.watch('date') ? new Date(form.watch('date')).toISOString().slice(0, 16) : ''}
+          onChange={(e) => {
+            const date = e.target.value ? new Date(e.target.value).toISOString() : '';
+            form.setValue('date', date);
+          }}
         />
+        {form.formState.errors.date && (
+          <FormMessage>{form.formState.errors.date.message}</FormMessage>
+        )}
+      </div>
 
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notas (opcional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Alguna nota adicional..."
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+      <div className="space-y-2">
+        <FormLabel>Notas (opcional)</FormLabel>
+        <Textarea
+          placeholder="Alguna nota adicional..."
+          className="resize-none"
+          {...form.register('notes')}
         />
+        {form.formState.errors.notes && (
+          <FormMessage>{form.formState.errors.notes.message}</FormMessage>
+        )}
+      </div>
 
         <AddCategoryModal
           isOpen={isAddCategoryModalOpen}
@@ -301,6 +242,5 @@ export function TransactionForm({
           )}
         </Button>
       </form>
-    </Form>
   );
 }

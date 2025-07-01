@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@shared/ui/input'; // Corrected path based on transaction-form.tsx
+import { Button } from '@shared/ui/button';
+import { Input } from '@shared/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,8 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+} from '@shared/ui/dialog';
+import { Label } from '@shared/ui/label';
 import { Loader2 } from 'lucide-react';
 
 interface AddCategoryModalProps {
@@ -91,7 +91,7 @@ export function AddCategoryModal({ isOpen, onClose, onCategoryCreated }: AddCate
             {error && <p className="col-span-4 text-sm text-red-500 text-center">{error}</p>}
           </div>
           <DialogFooter>
-            <DialogClose asChild>
+            <DialogClose>
               <Button type="button" variant="outline" onClick={handleClose} disabled={isSaving}>
                 Cancelar
               </Button>

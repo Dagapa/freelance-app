@@ -1,6 +1,6 @@
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { TransactionForm } from './transaction-form';
 import { useCreateTransaction } from '../hooks/use-create-transaction';
 

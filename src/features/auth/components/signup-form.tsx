@@ -6,7 +6,7 @@ import { createClient } from '@lib/supabase/client'
 import { Button } from '@shared/ui/button'
 import { Input } from '@shared/ui/input'
 import { Label } from '@shared/ui/label'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from '@shared/ui/toast'
 
 export function SignupForm() {
   const [email, setEmail] = useState('')
